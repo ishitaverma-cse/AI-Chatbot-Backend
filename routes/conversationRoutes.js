@@ -3,13 +3,15 @@ import {
     createConversation,
     getConversations,
     getConversationById,
-    deleteConversation,
+    deleteConversation
 } from '../controllers/conversationController.js'
 
 import {
     createMessage,
     getMessages,
 } from '../controllers/messageController.js'
+
+import { sendChatMessage } from '../controllers/chatController.js'
 
 import protect from '../middleware/authMiddleware.js'
 
@@ -23,6 +25,9 @@ router.post('/', createConversation)
 
 // Get all conversations
 router.get('/', getConversations)
+
+// Send a message and receive an AI response
+router.post('/:conversationId/chat', sendChatMessage)
 
 // Get a specific conversation
 router.get('/:id', getConversationById)
