@@ -1,13 +1,25 @@
 import Conversation from '../models/Conversation.js'
 import Message from '../models/Message.js'
+import assistantConfig from '../assistants/assistantConfig.js'
 
 // @desc    Create a new conversation
 // @route   POST /api/conversations
 // @access  Private
+
 const createConversation = async (req, res) => {
     try {
+        const { botType } = req.body
+
+        if (!botType || !Object.keys(assistantConfig).includes(botType)) {
+            return res.status(400).json({
+                success: false,
+                message: 'Please provide a valid assistant type',
+            })
+        }
+
         const conversation = await Conversation.create({
             userId: req.user._id,
+            botType,
         })
 
         res.status(201).json({
@@ -24,6 +36,7 @@ const createConversation = async (req, res) => {
         })
     }
 }
+
 
 // @desc    Get all conversations of logged-in user
 // @route   GET /api/conversations

@@ -1,8 +1,15 @@
 import genAI from '../config/gemini.js'
+import assistantConfig from '../assistants/assistantConfig.js'
 
-// Generate an AI response using conversation history
-const generateAIResponse = async (chatHistory) => {
+// Generate an AI response using conversation history and assistant instructions
+const generateAIResponse = async (chatHistory, botType) => {
     try {
+        const assistant = assistantConfig[botType]
+
+        if (!assistant) {
+            throw new Error('Invalid assistant type')
+        }
+
         const response = await genAI.models.generateContent({
             model: process.env.GEMINI_MODEL,
 
@@ -16,8 +23,7 @@ const generateAIResponse = async (chatHistory) => {
             })),
 
             config: {
-                systemInstruction:
-                    'You are Aether, a helpful, friendly and intelligent AI assistant. Provide clear, accurate and conversational responses. Adapt your explanations to the user’s needs.',
+                systemInstruction: assistant.systemInstruction,
             },
         })
 

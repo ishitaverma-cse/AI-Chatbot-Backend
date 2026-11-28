@@ -14,6 +14,19 @@ const conversationSchema = new mongoose.Schema(
             default: 'New Chat',
             maxlength: 100,
         },
+
+        botType: {
+            type: String,
+            enum: [
+                'fitness',
+                'health',
+                'career',
+                'entertainment',
+                'diet',
+                'books',
+            ],
+            required: true,
+        },
     },
     {
         timestamps: true,
